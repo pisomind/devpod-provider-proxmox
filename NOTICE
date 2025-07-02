@@ -1,0 +1,11 @@
+DevPod Provider for Proxmox
+Copyright 2024 Pisomind Inc.
+
+This product includes software developed by Loft Labs, Inc. (https://loft.sh/)
+
+Portions of this software are derived from devpod-provider-terraform:
+  https://github.com/loft-sh/devpod-provider-terraform
+  Copyright 2023 Loft Labs, Inc.
+  Licensed under the Apache License, Version 2.0
+
+The original source code has been modified to support Proxmox virtualization platform.

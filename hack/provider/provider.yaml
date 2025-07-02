@@ -1,0 +1,122 @@
+name: proxmox
+version: 0.1.0
+description: |-
+  DevPod on Proxmox
+icon: https://avatars3.githubusercontent.com/proxmox
+optionGroups:
+  - options:
+      - PROXMOX_API_URL
+      - PROXMOX_API_TOKEN_ID
+      - PROXMOX_API_TOKEN_SECRET
+      - PROXMOX_VM_ID
+      - NODE_NAME
+    name: "Proxmox API options"
+    defaultVisible: true
+  - options:
+      - CLOUDINIT_IP
+      - CLOUDINIT_GATEWAY
+    name: "Cloudinit network options"
+    defaultVisible: true
+  - options:
+      - CLOUDINIT_SSH_KEY
+      - CLOUDINIT_USERNAME
+      - CLOUDINIT_PASSWORD
+    name: "Cloudinit user credentials"
+    defaultVisible: true
+  - options:
+      - AGENT_PATH
+      - INACTIVITY_TIMEOUT
+      - INJECT_DOCKER_CREDENTIALS
+      - INJECT_GIT_CREDENTIALS
+    name: "Agent options"
+    defaultVisible: false
+options:
+  TERRAFORM_PROJECT:
+    description: The path or repo where the terraform files are. E.g. ./examples/proxmox or https://github.com/examples/proxmox
+    required: true
+    command: echo ""
+  PROXMOX_API_URL:
+    description: The URL of the Proxmox API. E.g. https://proxmox.example.com/api2/json. Use the publicly accessible API URL, if possible.
+    required: true
+    command: echo ""
+  PROXMOX_API_TOKEN_ID:
+    description: The ID of the Proxmox API token. E.g. pve
+    required: true
+    command: echo ""
+  PROXMOX_API_TOKEN_SECRET:
+    description: The secret of the Proxmox API token. E.g. 1234567890
+    required: true
+    password: true
+    command: echo ""
+  PROXMOX_VM_ID:
+    description: The ID of the Proxmox VM that will be created. E.g. 100
+    required: true
+    command: echo ""
+  NODE_NAME:
+    description: The name of the node to use.
+    required: true
+    command: echo ""
+
+  CLOUDINIT_IP:
+    description: The IP address of the VM. Must be in CIDR notation. E.g. 192.168.1.1/24
+    required: true
+    command: echo ""
+  CLOUDINIT_GATEWAY:
+    description: The gateway of the VM. E.g. 192.168.1.1
+    required: true
+    command: echo ""
+
+  CLOUDINIT_USERNAME:
+    description: The user to use to connect to the VM.
+    required: true
+    command: echo ""
+  CLOUDINIT_PASSWORD:
+    description: The password to use to connect to the VM.
+    required: true
+    password: true
+    command: echo ""
+  CLOUDINIT_SSH_KEY:
+    description: The SSH key to use to connect to the VM (different from the one devpod uses). E.g. ssh-ed25519 XXXX...
+    required: true
+    command: echo ""
+
+  INACTIVITY_TIMEOUT:
+    description: If defined, will automatically stop the VM after the inactivity period.
+    default: 10m
+  INJECT_GIT_CREDENTIALS:
+    description: "If DevPod should inject git credentials into the remote host."
+    default: "true"
+  INJECT_DOCKER_CREDENTIALS:
+    description: "If DevPod should inject docker credentials into the remote host."
+    default: "true"
+  AGENT_PATH:
+    description: The path where to inject the DevPod agent to.
+    default: /var/lib/toolbox/devpod
+binaries:
+  TERRAFORM_PROVIDER:
+    - os: linux
+      arch: amd64
+      path: https://github.com/pisomind/devpod-provider-proxmox/releases/download/##VERSION##/devpod-provider-proxmox-linux-amd64
+      checksum: ##CHECKSUM_LINUX_AMD64##
+    - os: linux
+      arch: arm64
+      path: https://github.com/pisomind/devpod-provider-proxmox/releases/download/##VERSION##/devpod-provider-proxmox-linux-arm64
+      checksum: ##CHECKSUM_LINUX_ARM64##
+    - os: darwin
+      arch: amd64
+      path: https://github.com/pisomind/devpod-provider-proxmox/releases/download/##VERSION##/devpod-provider-proxmox-darwin-amd64
+      checksum: ##CHECKSUM_DARWIN_AMD64##
+    - os: darwin
+      arch: arm64
+      path: https://github.com/pisomind/devpod-provider-proxmox/releases/download/##VERSION##/devpod-provider-proxmox-darwin-arm64
+      checksum: ##CHECKSUM_DARWIN_ARM64##
+    - os: windows
+      arch: amd64
+      path: https://github.com/pisomind/devpod-provider-proxmox/releases/download/##VERSION##/devpod-provider-proxmox-windows-amd64.exe
+      checksum: ##CHECKSUM_WINDOWS_AMD64##
+exec:
+  init: ${TERRAFORM_PROVIDER} init
+  command: ${TERRAFORM_PROVIDER} command
+  create: ${TERRAFORM_PROVIDER} create
+  delete: ${TERRAFORM_PROVIDER} delete
+  status: ${TERRAFORM_PROVIDER} status
